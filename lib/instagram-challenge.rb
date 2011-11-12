@@ -8,7 +8,8 @@ class Stripe
   attr_reader :image
 
   EXTRACTOR_LAMBDA = lambda do |p|
-    p.intensity
+    h, s, l, a = p.to_hsla
+    Math.sqrt(h + s) + 0.1 * l
   end
 
   def initialize(image)
@@ -31,7 +32,7 @@ class Stripe
     raise unless v1.size == v2.size
     d = 0.0
     for i in 0...v1.size do
-      d += (v1[i] - v2[i]) ** 2
+      d += (v1[i] - v2[i]).abs
     end
     Math.sqrt(d)
   end
